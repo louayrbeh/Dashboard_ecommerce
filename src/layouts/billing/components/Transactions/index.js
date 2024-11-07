@@ -18,7 +18,6 @@ import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 // import Divider from "@mui/material/Divider";
-import Icon from "@mui/material/Icon";
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -26,7 +25,7 @@ import MDTypography from "components/MDTypography";
 // import MDButton from "components/MDButton";
 
 // Billing page components
-import Transaction from "layouts/billing/components/Transaction";
+
 import {
   fetchInProgressCommands,
   delivredCommand as apiDelivredCommand,
@@ -35,6 +34,7 @@ import {
 
 import { getUserById, getAdresseById } from "layouts/dashboard/components/Projects/data/api";
 import { getProductById } from "layouts/tables/data/api";
+import Transaction from "./bill";
 
 function Transactions() {
   const [commands, setCommands] = useState([]);
@@ -125,9 +125,9 @@ function Transactions() {
       setCommands((prevCommands) =>
         prevCommands.map((cmd) => (cmd.id === commandId ? { ...cmd, ...updatedCommand } : cmd))
       );
-      console.log(`Commande in progress : ${commandId}`);
+      console.log(`Commande delivred : ${commandId}`);
     } catch (error) {
-      console.error(`Erreur lors de la ajoute de la commande in progress : ${error}`);
+      console.error(`Erreur lors de la ajoute de la commande delivred : ${error}`);
     }
   };
 
@@ -149,52 +149,44 @@ function Transactions() {
     return <p>{error}</p>;
   }
 
-  if (!commands.length) {
-    return <p>Aucune commande trouvée</p>;
-  }
-
   return (
     <Card sx={{ height: "100%" }}>
-      <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={3} px={2}>
-        <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
-          In progress commands
+      <MDBox pt={3} px={2} display="flex" justifyContent="space-between">
+        <MDTypography variant="h6" fontWeight="medium">
+          In progress orders
         </MDTypography>
-        <MDBox display="flex" alignItems="flex-start">
-          <MDBox color="text" mr={0.5} lineHeight={0}>
-            <Icon color="inherit" fontSize="small">
-              date_range
-            </Icon>
-          </MDBox>
-          <MDTypography variant="button" color="text" fontWeight="regular">
-            23 - 30 March 2020
-          </MDTypography>
-        </MDBox>
+        <MDTypography variant="h6" fontWeight="medium">
+          {commands.length}
+        </MDTypography>
       </MDBox>
       <MDBox pt={3} pb={2} px={2}>
-        <MDBox mb={2}>
+        <MDBox mb={2}></MDBox>
+        {commands.length > 0 ? (
+          <MDBox
+            component="ul"
+            display="flex"
+            flexDirection="column"
+            p={0}
+            m={0}
+            sx={{ listStyle: "none" }}
+          >
+            {commands.map((command, index) => (
+              <Transaction
+                key={index}
+                color="success"
+                id={command._id}
+                date={formatDate(command.createdAt)}
+                montant={command.total}
+                onDelivred={() => handleDelivredCommand(command._id)} // Pass command ID
+                onDelete={() => handleDeleteCommand(command._id)} // Pass command ID
+              />
+            ))}
+          </MDBox>
+        ) : (
           <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
-            newest
+            No in progress orders founds
           </MDTypography>
-        </MDBox>
-        <MDBox
-          component="ul"
-          display="flex"
-          flexDirection="column"
-          p={0}
-          m={0}
-          sx={{ listStyle: "none" }}
-        >
-          {commands.map((command, index) => (
-            <Transaction
-              key={index}
-              color="error"
-              icon="expand_more"
-              id={command._id}
-              date={formatDate(command.createdAt)}
-              montant={command.total}
-            />
-          ))}
-        </MDBox>
+        )}
       </MDBox>
     </Card>
   );

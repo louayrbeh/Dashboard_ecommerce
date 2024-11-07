@@ -13,6 +13,18 @@ export async function fetchCommands() {
     return [];
   }
 }
+
+export async function fetchCommandById(commandId) {
+  if (!commandId) return null;
+  try {
+    const response = await fetch(`http://localhost:3111/command/get/${commandId}`);
+    if (!response.ok) throw new Error("Failed to fetch command");
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching commands:", error);
+    throw error; // Throw error pour que le composant le gère
+  }
+}
 export async function fetchConfirmedCommands() {
   try {
     const response = await fetch("http://localhost:3111/command/get-confirmed-command"); // Use your actual URL

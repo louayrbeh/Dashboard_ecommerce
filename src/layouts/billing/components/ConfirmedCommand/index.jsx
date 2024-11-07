@@ -135,10 +135,6 @@ function ConfirmedCommandInformation() {
     return <p>{error}</p>;
   }
 
-  if (!commands.length) {
-    return <p>Aucune commande trouvée</p>;
-  }
-
   return (
     <Card id="delete-account">
       <MDBox pt={3} px={2} display="flex" justifyContent="space-between">
@@ -150,31 +146,37 @@ function ConfirmedCommandInformation() {
         </MDTypography>
       </MDBox>
       <MDBox pt={1} pb={2} px={2}>
-        <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
-          {commands.map((command, index) => (
-            <Bill
-              key={index}
-              name={command.Clientname}
-              email={command.Clientemail}
-              phone={command.Clientphone}
-              addresse={command.adresse}
-              total={command.total}
-              subtotal={command.subtotal}
-              deliveryFee={command.deliveryFee}
-              date={formatDate(command.createdAt)}
-              items={command.products.map((product) => ({
-                productName: product.product?.title || "Not defined",
-                brandName: product.product?.brandName || "Not defined",
-                image: product.product?.image?.[0] || "Not defined",
-                quantity: product.quantity,
-                size: product.size,
-                color: product.color,
-              }))}
-              onProgress={() => handleInProgressCommand(command._id)} // Pass command ID
-              onDelete={() => handleDeleteCommand(command._id)} // Pass command ID
-            />
-          ))}
-        </MDBox>
+        {commands.length > 0 ? (
+          <MDBox component="ul" display="flex" flexDirection="column" p={0} m={0}>
+            {commands.map((command, index) => (
+              <Bill
+                key={index}
+                name={command.Clientname}
+                email={command.Clientemail}
+                phone={command.Clientphone}
+                addresse={command.adresse}
+                total={command.total}
+                subtotal={command.subtotal}
+                deliveryFee={command.deliveryFee}
+                date={formatDate(command.createdAt)}
+                items={command.products.map((product) => ({
+                  productName: product.product?.title || "Not defined",
+                  brandName: product.product?.brandName || "Not defined",
+                  image: product.product?.image?.[0] || "Not defined",
+                  quantity: product.quantity,
+                  size: product.size,
+                  color: product.color,
+                }))}
+                onProgress={() => handleInProgressCommand(command._id)} // Pass command ID
+                onDelete={() => handleDeleteCommand(command._id)} // Pass command ID
+              />
+            ))}
+          </MDBox>
+        ) : (
+          <MDTypography variant="caption" color="text" fontWeight="bold" textTransform="uppercase">
+            No confirmed orders founds
+          </MDTypography>
+        )}
       </MDBox>
     </Card>
   );
