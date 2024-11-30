@@ -24,7 +24,8 @@ import Bill from "./bill";
 import { fetchCommandById } from "layouts/billing/data/api";
 import { getUserById } from "layouts/dashboard/components/Projects/data/api";
 import { getAdresseById } from "layouts/dashboard/components/Projects/data/api";
-import { getProductById } from "layouts/tables/data/api";
+
+import { getCardById } from "layouts/billing/data/api";
 
 function PaymentMethod() {
   const [commandId, setCommandId] = useState(null);
@@ -50,7 +51,7 @@ function PaymentMethod() {
         const products = commandData.items
           ? await Promise.all(
               commandData.items.map(async (item) => {
-                const productData = await getProductById(item.productId);
+                const productData = await getCardById(item.productId);
                 return {
                   ...item,
                   quantity: Number(item.quantity),

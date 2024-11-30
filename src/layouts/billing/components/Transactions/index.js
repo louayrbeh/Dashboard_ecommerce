@@ -33,8 +33,9 @@ import {
 } from "layouts/billing/data/api";
 
 import { getUserById, getAdresseById } from "layouts/dashboard/components/Projects/data/api";
-import { getProductById } from "layouts/tables/data/api";
+
 import Transaction from "./bill";
+import { getCardById } from "layouts/billing/data/api";
 
 function Transactions() {
   const [commands, setCommands] = useState([]);
@@ -57,7 +58,7 @@ function Transactions() {
                     command.items.map(async (item) => {
                       let productData;
                       try {
-                        productData = await getProductById(item.productId);
+                        productData = await getCardById(item.productId);
                       } catch (error) {
                         console.error(
                           `Erreur lors de la récupération du produit ${item.productId}:`,

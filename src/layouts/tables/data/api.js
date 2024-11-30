@@ -76,7 +76,7 @@ export async function addProduct(productData) {
 // Get product by ID
 export async function getProductById(productId) {
   try {
-    const response = await fetch(`http://localhost:3111/card/get/${productId}`);
+    const response = await fetch(`http://localhost:3111/pro/get/${productId}`);
     if (!response.ok) {
       const errorMessage = await response.text(); // Obtenir le message d'erreur du serveur
       throw new Error(`Failed to fetch product: ${errorMessage}`);

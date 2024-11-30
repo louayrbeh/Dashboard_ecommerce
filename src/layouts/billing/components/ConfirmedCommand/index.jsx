@@ -9,8 +9,9 @@ import Card from "@mui/material/Card";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import { getUserById, getAdresseById } from "layouts/dashboard/components/Projects/data/api";
-import { getProductById } from "layouts/tables/data/api";
+
 import { CircularProgress } from "@mui/material";
+import { getCardById } from "layouts/billing/data/api";
 
 function ConfirmedCommandInformation() {
   const [commands, setCommands] = useState([]);
@@ -33,7 +34,7 @@ function ConfirmedCommandInformation() {
                     command.items.map(async (item) => {
                       let productData;
                       try {
-                        productData = await getProductById(item.productId);
+                        productData = await getCardById(item.productId);
                       } catch (error) {
                         console.error(
                           `Erreur lors de la récupération du produit ${item.productId}:`,

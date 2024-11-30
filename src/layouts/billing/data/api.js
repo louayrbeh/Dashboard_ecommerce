@@ -13,6 +13,20 @@ export async function fetchCommands() {
     return [];
   }
 }
+// Get product by ID
+export async function getCardById(productId) {
+  try {
+    const response = await fetch(`http://localhost:3111/card/get/${productId}`);
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Failed to fetch card: ${errorMessage}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching card by ID:", error);
+  }
+}
 
 export async function fetchCommandById(commandId) {
   if (!commandId) return null;
