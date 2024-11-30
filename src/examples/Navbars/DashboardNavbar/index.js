@@ -60,12 +60,16 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseMenu = () => setOpenMenu(false);
 
   const handleLogout = () => {
-    // Supprimer le token du localStorage
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
+    // Afficher une boîte de dialogue de confirmation
+    const confirmLogout = window.confirm("Are you sure you want to logout ?");
 
-    // Rediriger vers la page de connexion
-    navigate("/authentication/sign-in");
+    if (confirmLogout) {
+      // Supprimer le token du localStorage
+      localStorage.removeItem("token");
+
+      // Rediriger vers la page de connexion
+      navigate("/authentication/sign-in");
+    }
   };
 
   const renderMenu = () => (
