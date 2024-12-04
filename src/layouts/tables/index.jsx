@@ -1,19 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
@@ -21,7 +5,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
+
 import DataTable from "examples/Tables/DataTable";
 import {
   fetchPopularProducts,
@@ -29,11 +13,12 @@ import {
   fetchFlashSaleProducts,
 } from "layouts/tables/data/api"; // Assurez-vous d'importer la fonction d'API
 
-import popularProductsData from "layouts/tables/data/PopularProductsTable"; // Assurez-vous d'importer la fonction d'API
-import BestSellersProductsData from "layouts/tables/data/BestSellersProductsTable"; // Assurez-vous d'importer la fonction d'API
-import FlashSaleProductsData from "layouts/tables/data/FlashSaleProducts"; // Assurez-vous d'importer la fonction d'API
-import { Stack } from "@mui/material";
+import popularProductsData from "layouts/tables/data/PopularProductsTable";
+import BestSellersProductsData from "layouts/tables/data/BestSellersProductsTable";
+import FlashSaleProductsData from "layouts/tables/data/FlashSaleProducts";
+import { CircularProgress, Stack } from "@mui/material";
 import { Link } from "react-router-dom";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 function Table() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -123,39 +108,6 @@ function Table() {
     FShandleDelete
   );
 
-  if (loading) {
-    return <p>Chargement des produits populaires...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
-  if (!products.length) {
-    return <p>Aucun produit populaire trouvé.</p>; // Message si aucun produit n'est disponible
-  }
-  if (BSloading) {
-    return <p>Chargement des produits Best-Seller...</p>;
-  }
-
-  if (BSerror) {
-    return <p>{BSerror}</p>;
-  }
-
-  if (!BSproducts.length) {
-    return <p>Aucun produit Best-Seller trouvé.</p>; // Message si aucun produit n'est disponible
-  }
-  if (FSloading) {
-    return <p>Chargement des produits Flash-Sellers...</p>;
-  }
-
-  if (FSerror) {
-    return <p>{FSerror}</p>;
-  }
-
-  if (!FSproducts.length) {
-    return <p>Aucun produit Flash-Seller trouvé.</p>; // Message si aucun produit n'est disponible
-  }
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -173,26 +125,39 @@ function Table() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <Stack direction={"row"} spacing={40}>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <MDTypography variant="h6" color="white">
                     Popular Products Table
                   </MDTypography>
                   <Link to={"/product/addProduct"}>
                     <MDTypography variant="h6" color="white">
                       {" "}
-                      Add+
+                      <AddCircleOutlineIcon fontSize="medium"></AddCircleOutlineIcon>
                     </MDTypography>
                   </Link>
                 </Stack>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: popularColumns, rows: popularRows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+                {loading ? (
+                  <CircularProgress></CircularProgress>
+                ) : !products.length ? (
+                  <MDTypography variant="body1" color="text" align="center" mb={2}>
+                    {" "}
+                    No products founds{" "}
+                  </MDTypography>
+                ) : error ? (
+                  <MDTypography variant="body1" color="text" align="center" mb={2}>
+                    {error}
+                  </MDTypography>
+                ) : (
+                  <DataTable
+                    table={{ columns: popularColumns, rows: popularRows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                )}
               </MDBox>
             </Card>
           </Grid>
@@ -208,18 +173,39 @@ function Table() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography variant="h6" color="white">
-                  Best-Sellers Products Table
-                </MDTypography>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <MDTypography variant="h6" color="white">
+                    Best-Sellers Products Table
+                  </MDTypography>
+                  <Link to={"/product/addProduct"}>
+                    <MDTypography variant="h6" color="white">
+                      {" "}
+                      <AddCircleOutlineIcon fontSize="medium"></AddCircleOutlineIcon>
+                    </MDTypography>
+                  </Link>
+                </Stack>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: bestSellersColumns, rows: bestSellersRows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+                {BSloading ? (
+                  <CircularProgress></CircularProgress>
+                ) : !BSproducts.length ? (
+                  <MDTypography variant="body1" color="text" align="center" mb={2}>
+                    {" "}
+                    No products founds{" "}
+                  </MDTypography>
+                ) : BSerror ? (
+                  <MDTypography variant="body1" color="text" align="center" mb={2}>
+                    {BSerror}
+                  </MDTypography>
+                ) : (
+                  <DataTable
+                    table={{ columns: bestSellersColumns, rows: bestSellersRows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                )}
               </MDBox>
             </Card>
           </Grid>
@@ -235,24 +221,44 @@ function Table() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography variant="h6" color="white">
-                  Flash-Sellers Products Table
-                </MDTypography>
+                <Stack direction="row" justifyContent="space-between" alignItems="center">
+                  <MDTypography variant="h6" color="white">
+                    Flash-Sellers Products Table
+                  </MDTypography>
+                  <Link to={"/product/addProduct"}>
+                    <MDTypography variant="h6" color="white">
+                      {" "}
+                      <AddCircleOutlineIcon fontSize="medium"></AddCircleOutlineIcon>
+                    </MDTypography>
+                  </Link>
+                </Stack>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable
-                  table={{ columns: FlashSalleColumns, rows: FlashSalleRows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+                {FSloading ? (
+                  <CircularProgress></CircularProgress>
+                ) : !FSproducts.length ? (
+                  <MDTypography variant="body1" color="text" align="center" mb={2}>
+                    {" "}
+                    No products founds{" "}
+                  </MDTypography>
+                ) : FSerror ? (
+                  <MDTypography variant="body1" color="text" align="center" mb={2}>
+                    {FSerror}
+                  </MDTypography>
+                ) : (
+                  <DataTable
+                    table={{ columns: FlashSalleColumns, rows: FlashSalleRows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                )}
               </MDBox>
             </Card>
           </Grid>
         </Grid>
       </MDBox>
-      <Footer />
     </DashboardLayout>
   );
 }

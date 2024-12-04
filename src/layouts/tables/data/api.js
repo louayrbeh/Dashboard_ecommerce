@@ -3,51 +3,105 @@
 // Function to fetch popular products
 export async function fetchPopularProducts() {
   try {
-    const response = await fetch("http://localhost:3111/pro/popular"); // Use your actual URL
-    console.log("Response status:", response.status);
-    if (!response.ok) {
-      throw new Error("Failed to fetch popular products");
+    const token = localStorage.getItem("token"); // On suppose que le token est dans le stockage local
+
+    if (!token) {
+      throw new Error("Token manquant. Veuillez vous connecter.");
     }
-    const data = await response.json();
-    console.log("Popular Products:", data); // Log data to confirm
-    return data;
+
+    const response = await fetch("http://localhost:3111/seller/popular", {
+      method: "GET", // GET pour récupérer les produits populaires
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajouter le token JWT dans les en-têtes
+      },
+    });
+
+    // Vérifiez si la réponse est correcte
+    if (!response.ok) {
+      const errorData = await response.json(); // Récupérer les détails de l'erreur
+      throw new Error(
+        errorData.message || "Erreur lors de la récupération des produits populaires"
+      );
+    }
+
+    const data = await response.json(); // Parse les données de la réponse
+
+    // Log des données pour la vérification
+    console.log("Produits populaires récupérés : ", data);
+
+    return data; // Retourner les données si nécessaire (par exemple pour les stocker dans l'état)
   } catch (error) {
-    console.error("Error fetching popular products:", error);
-    return [];
+    console.error("Erreur lors de la récupération des produits populaires :", error.message);
+    return null; // Retourner null ou une valeur d'erreur pour l'utiliser plus tard
   }
 }
 
 // Function to fetch best sellers
 export async function fetchBestSellersProducts() {
   try {
-    const response = await fetch("http://localhost:3111/pro/best-sellers");
-    console.log("Response status:", response.status);
-    if (!response.ok) {
-      throw new Error("Failed to fetch best sellers");
+    const token = localStorage.getItem("token"); // On suppose que le token est dans le stockage local
+
+    if (!token) {
+      throw new Error("Token manquant. Veuillez vous connecter.");
     }
-    const data = await response.json();
-    console.log("BS Product :", data);
-    return data;
+
+    const response = await fetch("http://localhost:3111/seller/BestSellers", {
+      method: "GET", // GET pour récupérer les produits bestSeller
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajouter le token JWT dans les en-têtes
+      },
+    });
+
+    // Vérifiez si la réponse est correcte
+    if (!response.ok) {
+      const errorData = await response.json(); // Récupérer les détails de l'erreur
+      throw new Error(
+        errorData.message || "Erreur lors de la récupération des produits bestSeller"
+      );
+    }
+
+    const data = await response.json(); // Parse les données de la réponse
+
+    // Log des données pour la vérification
+    console.log("Produits bestSeller récupérés : ", data);
+
+    return data; // Retourner les données si nécessaire (par exemple pour les stocker dans l'état)
   } catch (error) {
-    console.error("Error fetching best sellers:", error);
-    return [];
+    console.error("Erreur lors de la récupération des produits bestSeller :", error.message);
+    return null; // Retourner null ou une valeur d'erreur pour l'utiliser plus tard
   }
 }
-
 // Function to fetch flash sale products
 export async function fetchFlashSaleProducts() {
   try {
-    const response = await fetch("http://localhost:3111/pro/flash-sale");
-    console.log("Response status:", response.status);
-    if (!response.ok) {
-      throw new Error("Failed to fetch flash sale products");
+    const token = localStorage.getItem("token"); // On suppose que le token est dans le stockage local
+
+    if (!token) {
+      throw new Error("Token manquant. Veuillez vous connecter.");
     }
-    const data = await response.json();
-    console.log("FS Product :", data);
-    return data;
+
+    const response = await fetch("http://localhost:3111/seller/FlashSales", {
+      method: "GET", // GET pour récupérer les produits FlashSale
+      headers: {
+        Authorization: `Bearer ${token}`, // Ajouter le token JWT dans les en-têtes
+      },
+    });
+
+    // Vérifiez si la réponse est correcte
+    if (!response.ok) {
+      const errorData = await response.json(); // Récupérer les détails de l'erreur
+      throw new Error(errorData.message || "Erreur lors de la récupération des produits FlashSale");
+    }
+
+    const data = await response.json(); // Parse les données de la réponse
+
+    // Log des données pour la vérification
+    console.log("Produits FlashSale récupérés : ", data);
+
+    return data; // Retourner les données si nécessaire (par exemple pour les stocker dans l'état)
   } catch (error) {
-    console.error("Error fetching flash sale products:", error);
-    return [];
+    console.error("Erreur lors de la récupération des produits FlashSale :", error.message);
+    return null; // Retourner null ou une valeur d'erreur pour l'utiliser plus tard
   }
 }
 
@@ -122,5 +176,36 @@ export async function deleteProduct(productId) {
     }
   } catch (error) {
     console.error("Error deleting product:", error);
+  }
+}
+export async function deleteProductFromSeller(productId) {
+  const token = localStorage.getItem("token"); // Récupérer le token JWT du localStorage
+
+  if (!token) {
+    console.error("Token manquant. Veuillez vous connecter.");
+    return;
+  }
+
+  try {
+    const response = await fetch(`http://localhost:3111/seller/remove-product/${productId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`, // Inclure le token JWT pour l'authentification
+      },
+    });
+
+    const data = await response.json();
+
+    // Vérifier si la réponse est correcte
+    if (response.ok) {
+      console.log("Produit supprimé avec succès : ", data);
+      return data;
+    } else {
+      console.error("Erreur lors de la suppression du produit : ", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Erreur lors de la suppression du produit :", error.message);
+    return null;
   }
 }

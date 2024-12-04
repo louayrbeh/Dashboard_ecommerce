@@ -20,6 +20,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+import { green } from "@mui/material/colors";
 
 function Cover() {
   const [formData, setFormData] = useState({
@@ -61,11 +62,11 @@ function Cover() {
 
       if (data.status) {
         localStorage.setItem("token", data.token); // Enregistrer le token
-        setSuccessMessage("Connexion réussie !");
-        alert("login succefully !");
+        setSuccessMessage("Connection successful !");
+        alert("Sign up successfully");
         setTimeout(() => navigate("/dashboard"), 1500); // Rediriger après un délai
       } else {
-        setError(data.message || "Échec de la connexion.");
+        setError(data.message || "Sign up failed..");
       }
     } catch (err) {
       console.error("Erreur lors de la connexion :", err);

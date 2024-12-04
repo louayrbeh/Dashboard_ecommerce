@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 import { useState } from "react";
 
 // @mui material components
@@ -58,20 +43,11 @@ function PlatformSettings() {
           </MDBox>
           <MDBox width="80%" ml={0.5}>
             <MDTypography variant="button" fontWeight="regular" color="text">
-              Email me when someone answers on my post
+              Email me when someone place an order
             </MDTypography>
           </MDBox>
         </MDBox>
-        <MDBox display="flex" alignItems="center" mb={0.5} ml={-1.5}>
-          <MDBox mt={0.5}>
-            <Switch checked={mentionsMe} onChange={() => setMentionsMe(!mentionsMe)} />
-          </MDBox>
-          <MDBox width="80%" ml={0.5}>
-            <MDTypography variant="button" fontWeight="regular" color="text">
-              Email me when someone mentions me
-            </MDTypography>
-          </MDBox>
-        </MDBox>
+
         <MDBox mt={3}>
           <MDTypography variant="caption" fontWeight="bold" color="text" textTransform="uppercase">
             application
@@ -83,7 +59,7 @@ function PlatformSettings() {
           </MDBox>
           <MDBox width="80%" ml={0.5}>
             <MDTypography variant="button" fontWeight="regular" color="text">
-              New launches and projects
+              Product quantity updates
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -94,16 +70,6 @@ function PlatformSettings() {
           <MDBox width="80%" ml={0.5}>
             <MDTypography variant="button" fontWeight="regular" color="text">
               Monthly product updates
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-        <MDBox display="flex" alignItems="center" mb={0.5} ml={-1.5}>
-          <MDBox mt={0.5}>
-            <Switch checked={newsletter} onChange={() => setNewsletter(!newsletter)} />
-          </MDBox>
-          <MDBox width="80%" ml={0.5}>
-            <MDTypography variant="button" fontWeight="regular" color="text">
-              Subscribe to newsletter
             </MDTypography>
           </MDBox>
         </MDBox>

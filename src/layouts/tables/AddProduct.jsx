@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/jsx-key */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   TextField,
@@ -10,10 +10,8 @@ import {
   Card,
   CardContent,
   Checkbox,
-  Stack,
-  Typography,
 } from "@mui/material";
-import { pink } from "@mui/material/colors";
+
 import MDButton from "components/MDButton";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -22,6 +20,8 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { AddPhotoAlternate, Delete } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import { addProduct } from "./data/api";
+import { getCurrentSellerId } from "layouts/profile/data/apiProfile";
+import { addProductToSeller } from "layouts/profile/data/apiProfile";
 
 // Initialisation des états et des options
 const initialCategories = ["Mans", "Womens", "Kids"];
@@ -61,9 +61,30 @@ const ProductForm = () => {
     flashSale: false,
     bestSeller: false,
   });
+  const [sellerData, setSellerData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchSellerDataId = async () => {
+      try {
+        const data = await getCurrentSellerId();
+        console.log("ID :", data);
+        setSellerData(data);
+      } catch (err) {
+        setError("Erreur lors du chargement des données vendeur.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSellerDataId();
+  }, []);
 
   const handleSubmit = async () => {
     const productData = {
+      sellerId: sellerData._id,
       title: title,
       description: description,
       category: selectedCategory,
@@ -79,17 +100,21 @@ const ProductForm = () => {
       weight: weight,
       isAvailable: true,
       image: imageFields.map((field) => field.imageUrl),
-      isPopular : checkboxValues.popular,
+      isPopular: checkboxValues.popular,
       isBestSeller: checkboxValues.bestSeller,
       isFlashSale: checkboxValues.flashSale,
     };
 
     try {
       const response = await addProduct(productData);
-      console.log("Produit ajouté avec succès:", response);
-      alert("Product added successfuly !");
+      console.log("Réponse du backend :", response); // Affichez la réponse reçue
+      alert("Product added successfully!");
+
+      // Appeler la fonction pour ajouter le produit au vendeur
+      const addProductResponse = await addProductToSeller(response._id); // Assurez-vous que `response.data._id` est correct
+      console.log("Produit ajouté au vendeur :", addProductResponse);
     } catch (error) {
-      console.error("Error during add product:", error);
+      console.error("Error during product addition:", error.message || error);
       alert("Échec de l'ajout du produit.");
     }
   };

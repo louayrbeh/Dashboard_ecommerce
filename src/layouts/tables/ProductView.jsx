@@ -112,7 +112,7 @@ const ProductView = () => {
             {/* Displaying Additional Product Information */}
             <Stack direction="row" spacing={1} marginTop={2}>
               <CottageIcon />
-              <Typography variant="body2">
+              <Typography variant="body2" color="text">
                 <strong>Brand :</strong> {product.brandName ? product.brandName : "Not defined"}
               </Typography>
             </Stack>

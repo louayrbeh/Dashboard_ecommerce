@@ -1,29 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/function-component-definition */
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
 
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
-// @mui material components
 import { deleteProduct } from "layouts/tables/data/api";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
 import MDBadge from "components/MDBadge";
 import { Stack } from "@mui/material";
-
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import { deleteProductFromSeller } from "./api";
 
 // Fonction pour définir les colonnes et lignes du tableau de produits populaires
 export default function BestSellersProductsData(BSproducts, onDelete) {
@@ -75,14 +63,20 @@ export default function BestSellersProductsData(BSproducts, onDelete) {
         </MDBox>
       ),
       action: (
-        <Stack display={"flex"}>
+        <Stack direction={"row"} spacing={1} display={"flex"}>
           {/* Lien vers la vue détaillée du produit */}
           <Link to={`/product/${BSproduct._id}`}>
             <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-              View
+              <VisibilityIcon fontSize="small" />
             </MDTypography>
           </Link>
           {/* Bouton pour supprimer le produit */}
+
+          <Link to={`/product/UpdateProduct/${BSproduct._id}`}>
+            <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
+              <EditIcon fontSize="small" />
+            </MDTypography>
+          </Link>
           <MDTypography
             component="a"
             href="#"
@@ -90,17 +84,13 @@ export default function BestSellersProductsData(BSproducts, onDelete) {
             color="text"
             fontWeight="medium"
             onClick={async () => {
-              await deleteProduct(BSproduct._id); // Appel à la fonction deleteProduct avec l'ID du produit
+              await deleteProduct(BSproduct._id);
+              await deleteProductFromSeller(BSproduct._id); // Appel à la fonction deleteProduct avec l'ID du produit
               onDelete(); // Appel de la fonction onDelete pour mettre à jour la liste
             }}
           >
-            Delete
+            <DeleteIcon fontSize="small" />
           </MDTypography>
-          <Link to={`/product/UpdateProduct/${BSproduct._id}`}>
-            <MDTypography component="a" variant="caption" color="text" fontWeight="medium">
-              Update
-            </MDTypography>
-          </Link>
         </Stack>
       ),
     })),
